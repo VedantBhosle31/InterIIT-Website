@@ -1,0 +1,10 @@
+.app-main {
+  background: url("../assets/landingpage.svg");
+  background-size: cover;
+}
+
+.about-main {
+  background: url("../assets/about.svg");
+  background-size: cover;
+  width: 50vw;
+}

@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "PS" ALTER COLUMN "MidSubmissionStart" SET DATA TYPE TIME;

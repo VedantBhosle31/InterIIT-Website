@@ -1,0 +1,134 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model TeamMember {
+  id        String @id @default(uuid())
+  name      String
+  email     String
+  photo_url String
+  phone     String
+  discordId String
+  idCardUrl String
+  tshirt    String
+  foodPref  String
+  team      PSTeam @relation(fields: [team_id], references: [id])
+  team_id   String
+}
+
+model Leader {
+  id        String @id @default(uuid())
+  name      String
+  email     String
+  photo_url String
+  phone     String
+  discordId String
+  idCardUrl String
+  tshirt    String
+  foodPref  String
+}
+
+model PSTeam {
+  id           String       @id @default(uuid())
+  ps_id        String
+  team_members TeamMember[]
+  iit          IIT          @relation(fields: [iit_id], references: [id])
+  iit_id       String
+  Submission   Submission[]
+}
+
+model IIT {
+  id                        String   @id @default(uuid())
+  name                      String   @unique
+  password                  String
+  ps_teams                  PSTeam[]
+  role                      UserRole @default(PARTICIPANT)
+  iitNumber                 Int      @default(0)
+  contingentLeaderId        String?
+  deputyContingentLeaderId  String?
+  deputyContingentLeaderId2 String?
+  coCasId                   String?
+  feeApproved               Float    @default(0.0)
+  feeToBePaid               Float    @default(0.0)
+}
+
+model PS {
+  id                   String    @id @default(uuid())
+  name                 String
+  content              String
+  MidSubmissionStart   DateTime?
+  FinalSubmissionStart DateTime?
+  MidDeadline          DateTime?
+  FinalDeadline        DateTime?
+  psType               PSType
+  isSacEc              Boolean   @default(false)
+}
+
+model Accommodation {
+  id            String  @id @default(uuid())
+  psTeamId      String
+  memberId      String  @unique
+  name          String
+  sex           String
+  accommodation Boolean
+  startDate     String
+  endDate       String
+}
+
+enum UserRole {
+  PARTICIPANT
+  ADMIN
+}
+
+enum PSType {
+  HIGH
+  MID
+  LOW
+  NO
+}
+
+model Submission {
+  id             String         @id @default(uuid())
+  PSteam         PSTeam         @relation(fields: [pSTeamId], references: [id])
+  pSTeamId       String
+  time           DateTime       @default(now())
+  submissionType SubmissionType
+  submissionURL  String
+  description    String
+}
+
+model Contention {
+  id          String           @id @default(uuid())
+  pSTeamId    String           @unique
+  count       Int              @default(0)
+  contentions ContentionItem[]
+}
+
+model ContentionItem {
+  id           String           @id @default(uuid())
+  contentionId String
+  against      String           @default("")
+  description  String           @default("")
+  status       ContentionStatus @default(NOT_RAISED)
+  contention   Contention       @relation(fields: [contentionId], references: [id])
+}
+
+enum SubmissionType {
+  MID
+  FINAL
+}
+
+enum ContentionStatus {
+  NOT_RAISED
+  ACCEPTED
+  REJECTED
+  PENDING
+}

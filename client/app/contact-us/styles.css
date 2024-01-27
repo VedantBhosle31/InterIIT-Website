@@ -1,0 +1,5 @@
+.content-main {
+  background: url("../../assets/contactusbg.svg");
+  background-size: cover;
+  min-height: 100vh;
+}

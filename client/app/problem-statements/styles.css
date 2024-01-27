@@ -1,0 +1,5 @@
+.ps-main {
+  background: url("../../assets/psbackground.svg");
+  background-size: cover;
+  min-height: 100vh;
+}
